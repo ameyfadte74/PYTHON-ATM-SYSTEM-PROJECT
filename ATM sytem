@@ -1,0 +1,74 @@
+import time
+import calendar
+def main():
+    pinCode = ["1234", "1999", "2424", "1985", "5555"] #ACCOUNT HOLDER PIN DATA 
+    accountHoldersName = ["jayesh", "amol", "amey", "ram", "sam"]#ACCOUNT HOLDER NAME DATA
+    accountNumber = ['1353', '199281', '182838', '185597', '667432']#ACCOUNT HOLDER ACCOUNT NUMBER DATA
+    balance = [567000, 21873, 2341871, 275638, 91820]#ACCOUNT HOLDER BALANCE
+
+    start= 0
+    for i in range (0,999999999): #TO RUN LOOP INFINITE TIMES
+        print("****************Welcome To ATM System****************")
+        inputName = input("Enter Your Name: ")
+        index = 0 #INTIAL INDEX.
+        for name in accountHoldersName:
+            
+            if name == inputName:
+                index = accountHoldersName.index(inputName) 
+                inputPin = input("\nEnter Pin Number: ")
+            
+
+        if inputPin == pinCode[index]:
+            start = 1
+        else:
+            print("Invalid data.")
+            start = 0
+            continue
+        if start == 1:
+            print("\nYour account number is: ",accountNumber[index])
+            print("Your account balance is: Rs.", balance[index])
+            drawOrDeposite = input("\nDo you want to draw or deposit cash (draw/deposite/no): ")
+            if drawOrDeposite == "draw":
+                amount = input("\nEnter the amount you want to draw: ")
+                try: #Exception handling
+                    amount = int(amount)
+                    if amount > balance[index]:
+                        raise
+                except:
+                    print("invalid amount.")
+                    continue
+                remainingBalalnce = balance[index] - amount #SUBTRACTING AMOUT WHICH IS DRAWN
+                balance.remove(balance[index]) #REMOVING OLD AMOUNT IN LIST AND ADDING NEW AMOUNT 
+                balance.insert(index,remainingBalalnce)
+                availableBalance = print("\nYour available balance is: ",remainingBalalnce)
+            elif drawOrDeposite == "deposite":
+                amount = input("Enter the amount you want to deposite: ")
+                remainingBalalnce = balance[index] + amount #ADDING AMOUNT WHICH IS DEPOSITED 
+                balance.remove(balance[index])#REMOVING OLD AMOUNT AND ADDING NEW AMOUNT
+                balance.insert(index,remainingBalalnce)
+                availableBalance = print("Your available balance is: ",remainingBalalnce)
+
+            elif drawOrDeposite =="no":
+                remainingBalalnce = balance[index]
+                pass
+                
+
+            print("Do you want to print slip (Yes=y/No=n):")
+            p=str(input())
+            if p == 'y':
+                file=open("slip.txt",'w+')
+                file.write("*****WELCOME TO PCCE BANK****\n")
+                file.write("ATM ADDERESS:VERNA\n")
+                file.write("DATE        TIME    \n")
+                localtime=time.asctime()
+                file.write(str(localtime))
+                file.write("\nAccount Holder Name:")
+                file.write(inputName)
+                file.write("\nAccount No:")
+                file.write(accountNumber[index])
+                file.write("\nBalance:")
+                file.write(str(remainingBalalnce))
+                file.close()
+            elif p =='n':
+                print("***THANK YOU FOR USING ATM SERVICE***")
+main()
